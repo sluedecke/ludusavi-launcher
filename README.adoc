@@ -1,13 +1,15 @@
 = Ludusavi Launcher
 
-Wrapper script to be used as an intermediate in Heroic.
+Wrapper script to be used as an intermediate in Heroic for GOG Games.
 
 It determines the game from the command line parameters, restores savegames,
 launches the game and does a backup afterwards.
 
+Command line parameters are searched for the gogdl command in a very simply
+manner.
+
 == WARNING
 
-This script heavily depends on how Heroic launches a game.  Using mangohud or
-gamemode with a game breaks it.
+This script heavily depends on how Heroic launches a game.
 
 There is no error checking so far.
