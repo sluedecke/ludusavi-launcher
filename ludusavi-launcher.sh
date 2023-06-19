@@ -2,15 +2,20 @@
 
 # -- ABOUT --
 #
-# Wrapper script to use ludusavi for savegame backup / restoration.
+# Wrapper script to use ludusavi for savegame backup/restoration.
 #
-# Assumes that $3 is the directory with the game install which contains the file
+# Assumes that $5 is the directory with the game install which contains the file
 # `gameinfo`.
 #
 # This file comes without warranty, use at your own risk!
 #
 # License: MIT License
 # Author: Sascha Lüdecke <sascha@meta-x.de>
+
+# -- BUGS/TODO --
+#
+# - does not work if mangohud and/or gamemode is used
+# - error checking if backup/restore or game fails
 
 # -- HISTORY --
 #
@@ -25,7 +30,7 @@
 
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-LOGFILE=$SCRIPT_DIR/ludusavi-cloud.log
+LOGFILE=$SCRIPT_DIR/ludusavi-launcher.log
 
 # Standard paths
 ## LUDUSAVI=/usr/bin/ludusavi
@@ -39,11 +44,11 @@ ECHO=/usr/bin/echo
 
 
 GAMENAME=""
-if [ -r "$3/gameinfo" ]
+if [ -r "$5/gameinfo" ]
 then
-    GAMENAME=`$HEAD -1 "$3/gameinfo"`
+    GAMENAME=`$HEAD -1 "$5/gameinfo"`
 else
-    GAMENAME=`$JQ -r .name "$3/goggame-$4.info"`
+    GAMENAME=`$JQ -r .name "$5/goggame-$6.info"`
 fi
 
 # Path on steam deck if installed via flatpack
