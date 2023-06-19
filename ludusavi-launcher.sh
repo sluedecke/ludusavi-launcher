@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # -- ABOUT --
 #
@@ -42,15 +42,6 @@ HEAD=/usr/bin/head
 DATE=/usr/bin/date
 ECHO=/usr/bin/echo
 
-
-GAMENAME=""
-if [ -r "$5/gameinfo" ]
-then
-    GAMENAME=`$HEAD -1 "$5/gameinfo"`
-else
-    GAMENAME=`$JQ -r .name "$5/goggame-$6.info"`
-fi
-
 # Path on steam deck if installed via flatpack
 if [ $USER == deck ]
 then
@@ -58,6 +49,55 @@ then
 fi
 
 {
+    #
+    # determine game name and id from positional parameters
+    #
+    found=0
+    pos=0
+    for x
+    do
+        pos=$(( $pos+1 ))
+        $ECHO x: $pos - $x
+        if [ "`basename -- \"$x\"`" == "gogdl" ]
+        then
+            $ECHO gogdl found at position $pos
+            found=1
+            break
+        fi
+    done
+
+
+    $ECHO pos is: $pos, found: $found
+    GAME_DIR=""
+    GAME_ID=""
+
+    if [ $found == 1 ]
+    then
+        X=("$@")
+        GAME_DIR="${X[ $(( $pos+3 ))]}"
+        GAME_ID=${X[ $(( $pos+4 ))]}
+        $ECHO GAME_DIR: $GAME_DIR
+        $ECHO GAME_ID: $GAME_ID
+    else
+        $ECHO No gogdl found, doing nothing.
+        exit 1
+    fi
+
+
+    #
+    # Restoring, launching, backup
+    #
+
+    GAMENAME=""
+    if [ -r "$GAME_DIR/gameinfo" ]
+    then
+        GAMENAME=`$HEAD -1 "$GAME_DIR/gameinfo"`
+    else
+        GAMENAME=`$JQ -r .name "$GAME_DIR/goggame-$GAME_ID.info"`
+    fi
+
+
+
     $ECHO ==================================================
     $ECHO
     $ECHO Gamename is: $GAMENAME
@@ -71,10 +111,10 @@ fi
         # bypass STDOUT 
         $LUDUSAVI restore --force "$GAMENAME" 1>&2
     ) | $ZENITY --progress \
-               --title="Savegame restore" \
-               --no-cancel \
-               --auto-close \
-               --pulsate
+                --title="Savegame restore" \
+                --no-cancel \
+                --auto-close \
+                --pulsate
 
     # run game
     $ECHO Game run command:
@@ -82,16 +122,16 @@ fi
     "$@"
 
     # backup savegame
-    $ECHO $LUDUSAVI backup --merge --force "$GAMENAME"
+    $ECHO $LUDUSAVI backup --force "$GAMENAME"
     (
         $ECHO "# Backing up savegames for $GAMENAME"
         # bypass STDOUT
-        $LUDUSAVI backup --merge --force "$GAMENAME" 1>&2
+        $LUDUSAVI backup --force "$GAMENAME" 1>&2
     ) | $ZENITY --progress \
-               --title="Savegame backup" \
-               --no-cancel \
-               --auto-close \
-               --pulsate
+                --title="Savegame backup" \
+                --no-cancel \
+                --auto-close \
+                --pulsate
 
     $ECHO End time: `$DATE`
     $ECHO
