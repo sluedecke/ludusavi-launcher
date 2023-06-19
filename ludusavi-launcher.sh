@@ -19,8 +19,10 @@
 
 # -- HISTORY --
 #
-# Version: 0.X - WIP
+# Version: 0.3 - 2023-06-17
 #
+# - search for gogdl in parameter list to handle calls with mangohud and alike
+# - adapted to gogdl parameter list
 #
 # Version: 0.2 - 2022-09-29
 #
