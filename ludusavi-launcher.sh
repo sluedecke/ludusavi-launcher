@@ -51,6 +51,8 @@ then
 fi
 
 {
+    $ECHO ==================================================
+    $ECHO
     #
     # determine game name and id from positional parameters
     #
@@ -100,7 +102,7 @@ fi
 
 
 
-    $ECHO ==================================================
+    $ECHO -----------------------------------------------------------
     $ECHO
     $ECHO Gamename is: $GAMENAME
     $ECHO Start time: `$DATE`

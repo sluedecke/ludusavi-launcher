@@ -1,3 +1,9 @@
+NOTE: This is no longer maintained.  Work is in progress to implement a feature
+like this directly in ludusavi, check here:
+https://github.com/mtkennerly/ludusavi/pull/235
+
+IMPORTANT: This will not work with Heroic 2.9
+
 = Ludusavi Launcher
 
 Wrapper script to be used as an intermediate in Heroic for GOG Games.
